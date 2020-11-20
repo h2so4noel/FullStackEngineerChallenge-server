@@ -23,6 +23,8 @@ app.use(bodyParser.json())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// set routes for express
 app.use('/reviews', routes);
 
 app.use((req, res, next) => {

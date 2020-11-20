@@ -2,23 +2,17 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const reviewSchema = new Schema({
-  // targetId: {
-  //   type: String,
-  // },
-  // reviewerId: {
-  //   type: String,
-  // },
-  content: {
-    type: String,
+const reviewSchema = new Schema(
+  {
+    targetId: String,
+    reviewerId: String,
+    content: String,
+    taskName: String,
+    createdAt: String,
   },
-  taskName: {
-    type: String,
-  },
-  // createdAt: {
-  //   type: String,
-  // },
-});
+  // mongoose options
+  { timestamps: true } // add timestamps
+);
 
 const review = mongoose.model('Review', reviewSchema);
 

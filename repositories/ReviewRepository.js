@@ -1,7 +1,6 @@
 import Review from '../models/Review.js';
 
 class ReviewRepository {
-
   constructor(model) {
     this.model = model;
   }
