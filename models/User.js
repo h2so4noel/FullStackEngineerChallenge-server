@@ -5,12 +5,12 @@ const { Schema } = mongoose;
 const userSchema = new Schema(
   {
     name: String,
-    role: String,
+    isAdmin: Boolean, // false means an employee
   },
   // mongoose options
   { timestamps: true } // add timestamps
 );
 
-const review = mongoose.model('User', userSchema);
+const user = mongoose.model('User', userSchema);
 
-export default review;
+export default user;
