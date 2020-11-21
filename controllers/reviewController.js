@@ -57,9 +57,7 @@ reviewController.findAll = (req, res) => {
   Review.find(condition).then(data => {
     res.send(data);
   }).catch(err => {
-    res.status(500).send({
-      message: err.message || "Error while retrieving all reviews."
-    });
+    res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
   });
 }
 
@@ -68,14 +66,10 @@ reviewController.findOne = (req, res) => {
 
   Review.findById(id).then(data => {
     if (!data) {
-      res.status(404).send({ 
-        message: "Review not found with id: " + id 
-      });
+      res.status(404).send({ message: "Review not found with id: " + id });
     } else res.send(data);
   }).catch(err => {
-    res.status(500).send({ 
-      message: "Error while retrieving Review with id:" + id 
-    });
+      res.status(500).send({ message: "Error while retrieving Review with id:" + id });
   });
 }
 
@@ -84,19 +78,13 @@ reviewController.delete = (req, res) => {
 
   Review.findByIdAndRemove(id).then(data => {
     if (!data) {
-      res.status(404).send({
-        message: "Review not found with id: " + id
-      });
+      res.status(404).send({ message: "Review not found with id: " + id });
     } else {
-      res.send({
-        message: "Review was deleted successfully."
-      });
+      res.send({ message: "Review was deleted successfully." });
     }
   })
     .catch(err => {
-      res.status(500).send({
-        message: "Error while deleting Review with id:" + id
-      });
+      res.status(500).send({ message: "Error while deleting Review with id:" + id });
     });
 };
 
