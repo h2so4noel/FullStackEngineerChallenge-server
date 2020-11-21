@@ -12,6 +12,8 @@ reviewController.create = (req, res) => {
   const review = new Review({
     content: req.body.content,
     taskName: req.body.taskName,
+    revieweeUserId: req.body.revieweeUserId,
+    reviewerUserId: req.body.reviewerUserId,
   });
 
   review.save(review).then(data => {
@@ -49,9 +51,10 @@ reviewController.findAll = (req, res) => {
   console.log('find all reviews: ');
   // const title = req.query.title;
   // const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  const id = req.query.revieweeUserId;
+  const condition = revieweeUserId ? { revieweeUserId: id } : {};
 
-  // Review.find(condition)
-  Review.find().then(data => {
+  Review.find(condition).then(data => {
     res.send(data);
   }).catch(err => {
     res.status(500).send({
@@ -96,5 +99,13 @@ reviewController.delete = (req, res) => {
       });
     });
 };
+
+reviewController.deleteAll = (req, res) => {
+  Review.deleteMany().then(data => {
+    res.send({ message: 'Deleted all reviews successfully' });
+  }).catch(err => {
+    res.status(500).send({ message: err.message || "Error while deleting all reviews" });
+  })
+}
 
 export default reviewController;
