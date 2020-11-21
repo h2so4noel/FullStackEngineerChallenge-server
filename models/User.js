@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema(
   {
     name: String,
-    isAdmin: Boolean, // false means an employee
+    isAdmin: { type: Boolean, default: false }, // false means an employee
   },
   // mongoose options
   { timestamps: true } // add timestamps
