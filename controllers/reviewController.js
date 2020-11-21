@@ -14,7 +14,7 @@ reviewController.create = (req, res) => {
     taskName: req.body.taskName,
   });
 
-  Review.save(review).then(data => {
+  review.save(review).then(data => {
       res.send(data);
     }).catch(err => {
       res.status(500).send({
@@ -82,17 +82,17 @@ reviewController.delete = (req, res) => {
   Review.findByIdAndRemove(id).then(data => {
     if (!data) {
       res.status(404).send({
-        message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+        message: "Review not found with id: " + id
       });
     } else {
       res.send({
-        message: "Tutorial was deleted successfully!"
+        message: "Review was deleted successfully."
       });
     }
   })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
+        message: "Error while deleting Review with id:" + id
       });
     });
 };
