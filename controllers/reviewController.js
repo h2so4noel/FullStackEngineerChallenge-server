@@ -84,7 +84,7 @@ reviewController.delete = (req, res) => {
     }
   })
     .catch(err => {
-      res.status(500).send({ message: "Error while deleting Review with id:" + id });
+      res.status(500).send({ message: err.message || "Error while deleting Review with id:" + id });
     });
 };
 
