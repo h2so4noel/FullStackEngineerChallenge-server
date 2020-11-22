@@ -21,6 +21,7 @@ for (let i = 0; i < 20; i++) {
 
 await User.insertMany(users).then((res) => {
   console.log('Finished seeding users');
+  users = res; // Update sample users list to use with seeding reviews
 }).catch(() => {
   console.log('Something went wrong when seeding Users');
 });
@@ -31,8 +32,8 @@ for (let i = 0; i < 100; i++) {
   const review = {
     content: faker.lorem.words(15),
     taskName: faker.lorem.words(1),
-    revieweeUserId: _.sample(users).id,
-    reviewerUserId: _.sample(users).id,
+    revieweeUserId: _.sample(users)._id,
+    reviewerUserId: _.sample(users)._id,
   }
   reviews.push(review);
 }

@@ -11,15 +11,19 @@ router.get('/users', userController.findAll);
 router.post('/users', userController.create);
 // delete a user
 router.delete('/users/:id', userController.delete);
+// delete all users
+router.delete('/users', userController.deleteAll);
 
 // Reviews:
 // get all review entries
 router.get('/reviews', reviewController.findAll);
 // create a review
 router.post('/reviews', reviewController.create);
-// delete a review
-router.delete('/reviews/:id', reviewController.delete);
 // edit a review
 router.put('/reviews/:id', reviewController.update);
+// delete a review
+router.delete('/reviews/:id', reviewController.delete);
+// delete all reviews
+router.delete('/reviews', reviewController.deleteAll);
 
 export default router;

@@ -51,8 +51,7 @@ reviewController.findAll = (req, res) => {
   console.log('find all reviews: ');
   // const title = req.query.title;
   // const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-  const id = req.query.revieweeUserId;
-  const condition = revieweeUserId ? { revieweeUserId: id } : {};
+  const condition = req.query.revieweeUserId ? { revieweeUserId: req.query.revieweeUserId } : {};
 
   Review.find(condition).then(data => {
     res.send(data);
