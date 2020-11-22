@@ -14,6 +14,7 @@ mongoose.connect(config.DB, {
 let users = [];
 for (let i = 0; i < 20; i++) {
   const user = {
+    _id: new mongoose.Types.ObjectId(),
     name: faker.name.firstName(),
   }
   users.push(user);
@@ -30,18 +31,67 @@ await User.insertMany(users).then((res) => {
 let reviews = [];
 for (let i = 0; i < 100; i++) {
   const review = {
+    _id: new mongoose.Types.ObjectId(),
     content: faker.lorem.words(15),
     taskName: faker.lorem.words(1),
     revieweeUserId: _.sample(users)._id,
     reviewerUserId: _.sample(users)._id,
   }
   reviews.push(review);
+
+  // Push created Reviews to their reviewees
+  User.findOneAndUpdate(
+    { '_id' : review.revieweeUserId }, 
+    { $push: { reviews: review._id } },
+    {upsert: true}, 
+    (err) => {
+      if (err) return console.log(err + review._id);
+    }
+  );
 }
 
 await Review.insertMany(reviews).then((res) => {
   console.log('Finished seeding reviews');
 }).catch(() => {
   console.log('Something went wrong when seeding Reviews');
+});
+
+// Seeding feedbacks
+let feedbacks = [];
+for (let i = 0; i < 100; i++) {
+  const feedback = {
+    _id: new mongoose.Types.ObjectId(),
+    reviewId: _.sample(reviews)._id,
+    assignedUserId: _.sample(users)._id,
+    pending: _.sample([ true, false ]), // either true or false
+    content: faker.lorem.words(15),
+  }
+  feedbacks.push(feedback);
+
+  // Push created feedbacks to their users
+  User.findOneAndUpdate(
+    { '_id' : feedback.assignedUserId }, 
+    { $push: { assignedFeedbacks: feedback._id } },
+    { upsert: true }, 
+    (err) => {
+      if (err) return console.log(err + feedback._id);
+    }
+  );
+
+  Review.findOneAndUpdate(
+    { '_id' : feedback.reviewId }, 
+    { $push: { feedbacks: feedback._id } },
+    { upsert: true }, 
+    (err) => {
+      if (err) return console.log(err + feedback._id);
+    }
+  );
+}
+
+await Feedback.insertMany(feedbacks).then((res) => {
+  console.log('Finished seeding feedbacks');
+}).catch(() => {
+  console.log('Something went wrong when seeding Feedbacks');
 });
 
 mongoose.connection.close();

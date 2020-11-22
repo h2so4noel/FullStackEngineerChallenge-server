@@ -17,7 +17,8 @@ userController.create = (req, res) => {
 }
 
 userController.findAll = (req, res) => {
-  User.find().then(data => {
+  // Populating reviews and feedbacks assigned
+  User.find().populate('reviews').populate('assignedFeedbacks').then(data => {
     res.send(data);
   }).catch(err => {
     res.status(500).send({ message: err.msg || "Error while retrieving all users" });
@@ -27,7 +28,7 @@ userController.findAll = (req, res) => {
 userController.findOne = (req,res) => {
   const id = req.params.id;
 
-  User.findById(id).then(data => {
+  User.findById(id).populate('reviews').populate('assignedFeedbacks').then(data => {
     if (!data) {
       res.status(404).send({ message: "User not found with id: " + id });
     } else {

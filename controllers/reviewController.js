@@ -34,12 +34,16 @@ reviewController.update = (req, res) => {
 
   const id = req.params.id;
 
-  Review.findByIdAndUpdate(id, req.body, { useFindAndModify: false }).then(data => {
-    if (!data) {
-      res.status(404).send({ message: "Review not found with id: " + id });
-    } else {
-      res.send({ message: "Review updated." });
-    }
+  Review.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .populate('feedbacks')
+    .populate('revieweeUserId')
+    .populate('reviewerUserId')
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "Review not found with id: " + id });
+      } else {
+        res.send({ message: "Review updated." });
+      }
   }).catch(err => {
     res.status(500).send({
       message: "Error updating review with id:" + id 
@@ -53,23 +57,31 @@ reviewController.findAll = (req, res) => {
   // const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
   const condition = req.query.revieweeUserId ? { revieweeUserId: req.query.revieweeUserId } : {};
 
-  Review.find(condition).then(data => {
-    res.send(data);
-  }).catch(err => {
-    res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
-  });
+  Review.find(condition)
+    .populate('feedbacks')
+    .populate('revieweeUserId')
+    .populate('reviewerUserId')
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
+    });
 }
 
 reviewController.findOne = (req, res) => {
   const id = req.params.id;
 
-  Review.findById(id).then(data => {
-    if (!data) {
-      res.status(404).send({ message: "Review not found with id: " + id });
-    } else res.send(data);
-  }).catch(err => {
-      res.status(500).send({ message: "Error while retrieving Review with id:" + id });
-  });
+  Review.findById(id)
+    .populate('feedbacks')
+    .populate('revieweeUserId')
+    .populate('reviewerUserId')
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "Review not found with id: " + id });
+      } else res.send(data);
+    }).catch(err => {
+        res.status(500).send({ message: "Error while retrieving Review with id:" + id });
+    });
 }
 
 reviewController.delete = (req, res) => {
