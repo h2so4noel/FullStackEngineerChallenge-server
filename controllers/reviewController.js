@@ -12,7 +12,7 @@ reviewController.create = (req, res) => {
   const review = new Review({
     content: req.body.content,
     taskName: req.body.taskName,
-    revieweeUserId: req.body.revieweeUserId,
+    revieweeUser: req.body.revieweeUser,
   });
 
   review.save(review).then(data => {
@@ -34,7 +34,14 @@ reviewController.update = (req, res) => {
   const id = req.params.id;
 
   Review.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .populate('feedbacks')
+    .populate('revieweeUser')
+    .populate({
+      path: 'feedbacks',
+      populate: {
+        path: 'assignedUser',
+        model: 'User',
+      }
+    })
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "Review not found with id: " + id });
@@ -52,10 +59,17 @@ reviewController.findAll = (req, res) => {
   console.log('find all reviews: ');
   // const title = req.query.title;
   // const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-  const condition = req.query.revieweeUserId ? { revieweeUserId: req.query.revieweeUserId } : {};
+  const condition = req.query.revieweeUser ? { revieweeUser: req.query.revieweeUser } : {};
 
   Review.find(condition)
-    .populate('feedbacks')
+    .populate('revieweeUser')
+    .populate({
+      path: 'feedbacks',
+      populate: {
+        path: 'assignedUser',
+        model: 'User',
+      }
+    })
     .then(data => {
       res.send(data);
     }).catch(err => {
@@ -67,7 +81,14 @@ reviewController.findOne = (req, res) => {
   const id = req.params.id;
 
   Review.findById(id)
-    .populate('feedbacks')
+    .populate('revieweeUser')
+    .populate({
+      path: 'feedbacks',
+      populate: {
+        path: 'assignedUser',
+        model: 'User',
+      }
+    })
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "Review not found with id: " + id });

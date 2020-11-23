@@ -48,7 +48,7 @@ userController.update = (req, res) => {
 
   const id = req.params.id;
 
-  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false, new: true })
     .populate('reviews')
     .populate('assignedFeedbacks')
     .then(data => {

@@ -34,13 +34,13 @@ for (let i = 0; i < 100; i++) {
     _id: new mongoose.Types.ObjectId(),
     content: faker.lorem.words(50),
     taskName: `Task #${i} Performance Review`,
-    revieweeUserId: _.sample(users)._id,
+    revieweeUser: _.sample(users)._id,
   }
   reviews.push(review);
 
   // Push created Reviews to their reviewees
   User.findOneAndUpdate(
-    { '_id' : review.revieweeUserId }, 
+    { '_id' : review.revieweeUser }, 
     { $push: { reviews: review._id } },
     {upsert: true}, 
     (err) => {
@@ -61,7 +61,7 @@ for (let i = 0; i < 100; i++) {
   const feedback = {
     _id: new mongoose.Types.ObjectId(),
     reviewId: _.sample(reviews)._id,
-    assignedUserId: _.sample(users)._id,
+    assignedUser: _.sample(users)._id,
     pending: _.sample([ true, false ]), // either true or false
     content: faker.lorem.words(25),
   }
@@ -69,7 +69,7 @@ for (let i = 0; i < 100; i++) {
 
   // Push created feedbacks to their users
   User.findOneAndUpdate(
-    { '_id' : feedback.assignedUserId }, 
+    { '_id' : feedback.assignedUser }, 
     { $push: { assignedFeedbacks: feedback._id } },
     { upsert: true }, 
     (err) => {
