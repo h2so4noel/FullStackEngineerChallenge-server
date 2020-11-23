@@ -13,7 +13,6 @@ reviewController.create = (req, res) => {
     content: req.body.content,
     taskName: req.body.taskName,
     revieweeUserId: req.body.revieweeUserId,
-    reviewerUserId: req.body.reviewerUserId,
   });
 
   review.save(review).then(data => {
@@ -40,7 +39,7 @@ reviewController.update = (req, res) => {
       if (!data) {
         res.status(404).send({ message: "Review not found with id: " + id });
       } else {
-        res.send({ message: "Review updated." });
+        res.send(data);
       }
   }).catch(err => {
     res.status(500).send({

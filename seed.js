@@ -32,10 +32,9 @@ let reviews = [];
 for (let i = 0; i < 100; i++) {
   const review = {
     _id: new mongoose.Types.ObjectId(),
-    content: faker.lorem.words(40),
-    taskName: faker.lorem.words(2),
+    content: faker.lorem.words(50),
+    taskName: `Task #${i} Performance Review`,
     revieweeUserId: _.sample(users)._id,
-    reviewerUserId: _.sample(users)._id,
   }
   reviews.push(review);
 
@@ -64,7 +63,7 @@ for (let i = 0; i < 100; i++) {
     reviewId: _.sample(reviews)._id,
     assignedUserId: _.sample(users)._id,
     pending: _.sample([ true, false ]), // either true or false
-    content: faker.lorem.words(20),
+    content: faker.lorem.words(25),
   }
   feedbacks.push(feedback);
 

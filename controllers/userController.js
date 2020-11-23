@@ -39,6 +39,31 @@ userController.findOne = (req,res) => {
   });
 }
 
+userController.update = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({ 
+      message: "Invalid body (empty)" 
+    });
+  }
+
+  const id = req.params.id;
+
+  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .populate('reviews')
+    .populate('assignedFeedbacks')
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "User not found with id: " + id });
+      } else {
+        res.send(data);
+      }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Error updating User with id:" + id 
+    });
+  });
+}
+
 userController.delete = (req, res) => {
   const id = req.params.id;
 
