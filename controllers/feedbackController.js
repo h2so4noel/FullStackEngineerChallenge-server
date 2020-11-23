@@ -1,15 +1,11 @@
-import { Feedback } from '../models/index.js'
+import mongoose from 'mongoose';
+import { Feedback, User, Review } from '../models/index.js'
 
 const feedbackController = {};
 
 feedbackController.create = (req, res) => {
-  if (!req.body.content) {
-    return res.status(400).send({ 
-      message: "Invalid body.content (can't create feedback without content)" 
-    });
-  }
-
   const feedback = new Feedback({
+    _id: new mongoose.Types.ObjectId(),
     reviewId: req.body.reviewId,
     assignedUser: req.body.assignedUser,
     pending: true,
@@ -17,12 +13,30 @@ feedbackController.create = (req, res) => {
   });
 
   feedback.save(feedback).then(data => {
-      res.send(data);
-    }).catch(err => {
-      res.status(500).send({
-        message: err.message || "Error while creating feedback." 
-      });
+    res.send(data);
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || "Error while creating feedback." 
     });
+  });
+
+  User.findOneAndUpdate(
+    { '_id' : feedback.assignedUser }, 
+    { $push: { feedbacks: feedback._id } },
+    {upsert: true}, 
+    (err) => {
+      if (err) return console.log(err + review._id);
+    }
+  );
+
+  Review.findOneAndUpdate(
+    { '_id' : feedback.reviewId }, 
+    { $push: { feedbacks: feedback._id } },
+    {upsert: true}, 
+    (err) => {
+      if (err) return console.log(err + review._id);
+    }
+  );
 }
 
 export default feedbackController;
