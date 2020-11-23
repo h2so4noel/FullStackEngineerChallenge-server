@@ -7,6 +7,8 @@ const router = express.Router();
 // Users:
 // get all user entries
 router.get('/users', userController.findAll);
+// get user by id
+router.get('/users/:id', userController.findOne);
 // create a user
 router.post('/users', userController.create);
 // delete a user

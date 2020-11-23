@@ -36,8 +36,6 @@ reviewController.update = (req, res) => {
 
   Review.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .populate('feedbacks')
-    .populate('revieweeUserId')
-    .populate('reviewerUserId')
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "Review not found with id: " + id });
@@ -59,8 +57,6 @@ reviewController.findAll = (req, res) => {
 
   Review.find(condition)
     .populate('feedbacks')
-    .populate('revieweeUserId')
-    .populate('reviewerUserId')
     .then(data => {
       res.send(data);
     }).catch(err => {
@@ -73,8 +69,6 @@ reviewController.findOne = (req, res) => {
 
   Review.findById(id)
     .populate('feedbacks')
-    .populate('revieweeUserId')
-    .populate('reviewerUserId')
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "Review not found with id: " + id });
