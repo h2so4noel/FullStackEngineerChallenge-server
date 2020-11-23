@@ -1,6 +1,7 @@
 import express from 'express';
 import userController from '../controllers/userController.js';
 import reviewController from '../controllers/reviewController.js';
+import feedbackController from '../controllers/feedbackController.js';
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ router.put('/users/:id', userController.update);
 router.delete('/users/:id', userController.delete);
 // delete all users
 router.delete('/users', userController.deleteAll);
+
+// Feedback:
+// create a feedback
+router.post('/feedbacks', feedbackController.create);
 
 // Reviews:
 // get all review entries
