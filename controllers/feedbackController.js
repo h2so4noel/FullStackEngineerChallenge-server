@@ -22,7 +22,7 @@ feedbackController.create = (req, res) => {
 
   User.findOneAndUpdate(
     { '_id' : feedback.assignedUser }, 
-    { $push: { feedbacks: feedback._id } },
+    { $push: { assignedFeedbacks: feedback._id } },
     {upsert: true}, 
     (err) => {
       if (err) return console.log(err + review._id);
@@ -51,6 +51,34 @@ feedbackController.findAllByReviewId = (req, res) => {
     }).catch(err => {
       res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
     });
+}
+
+feedbackController.update = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({ 
+      message: "Invalid body (empty)" 
+    });
+  }
+
+  const id = req.params.id;
+  const body = {
+    content: req.body.content,
+    pending: false,
+  }
+
+  Feedback.findByIdAndUpdate(id, body, { useFindAndModify: false })
+    .populate('assignedUser')
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "Feedback not found with id: " + id });
+      } else {
+        res.send(data);
+      }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Error updating feedback with id:" + id 
+    });
+  });
 }
 
 export default feedbackController;

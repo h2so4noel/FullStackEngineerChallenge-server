@@ -24,6 +24,8 @@ router.delete('/users', userController.deleteAll);
 router.post('/feedbacks', feedbackController.create);
 // find feedbacks by review id
 router.get('/feedbacks', feedbackController.findAllByReviewId);
+// edit feedback
+router.put('/feedbacks/:id', feedbackController.update);
 
 // Reviews:
 // get all review entries
