@@ -17,16 +17,7 @@ userController.create = (req, res) => {
 }
 
 userController.findAll = (req, res) => {
-  // Populating reviews and feedbacks assigned
   User.find()
-    .populate('reviews')
-    .populate({
-      path: 'assignedFeedbacks',
-      populate: {
-        path: 'review',
-        model: 'Review',
-      }
-    })
     .then(data => {
       res.send(data);
     }).catch(err => {
@@ -36,7 +27,7 @@ userController.findAll = (req, res) => {
 
 userController.findOne = (req,res) => {
   const id = req.params.id;
-
+  // Populate required data
   User.findById(id)
     .populate('reviews')
     .populate({
@@ -65,7 +56,7 @@ userController.update = (req, res) => {
   }
 
   const id = req.params.id;
-
+  // Populate required data
   User.findByIdAndUpdate(id, req.body, { useFindAndModify: false, new: true })
     .populate('reviews')
     .populate({

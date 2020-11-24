@@ -24,6 +24,39 @@ reviewController.create = (req, res) => {
     });
 }
 
+reviewController.findAll = (req, res) => {
+  console.log('find all reviews: ');
+  const condition = req.query.revieweeUser ? { revieweeUser: req.query.revieweeUser } : {};
+
+  Review.find(condition)
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
+    });
+}
+
+reviewController.findOne = (req, res) => {
+  const id = req.params.id;
+
+  Review.findById(id)
+    .populate('revieweeUser')
+    .populate({
+      path: 'feedbacks',
+      populate: {
+        path: 'assignedUser',
+        model: 'User',
+      }
+    })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "Review not found with id: " + id });
+      } else res.send(data);
+    }).catch(err => {
+        res.status(500).send({ message: "Error while retrieving Review with id:" + id });
+    });
+}
+
 reviewController.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({ 
@@ -53,49 +86,6 @@ reviewController.update = (req, res) => {
       message: "Error updating review with id:" + id 
     });
   });
-}
-
-reviewController.findAll = (req, res) => {
-  console.log('find all reviews: ');
-  // const title = req.query.title;
-  // const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-  const condition = req.query.revieweeUser ? { revieweeUser: req.query.revieweeUser } : {};
-
-  Review.find(condition)
-    .populate('revieweeUser')
-    .populate({
-      path: 'feedbacks',
-      populate: {
-        path: 'assignedUser',
-        model: 'User',
-      }
-    })
-    .then(data => {
-      res.send(data);
-    }).catch(err => {
-      res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
-    });
-}
-
-reviewController.findOne = (req, res) => {
-  const id = req.params.id;
-
-  Review.findById(id)
-    .populate('revieweeUser')
-    .populate({
-      path: 'feedbacks',
-      populate: {
-        path: 'assignedUser',
-        model: 'User',
-      }
-    })
-    .then(data => {
-      if (!data) {
-        res.status(404).send({ message: "Review not found with id: " + id });
-      } else res.send(data);
-    }).catch(err => {
-        res.status(500).send({ message: "Error while retrieving Review with id:" + id });
-    });
 }
 
 reviewController.delete = (req, res) => {

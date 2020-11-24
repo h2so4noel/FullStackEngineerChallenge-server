@@ -39,4 +39,18 @@ feedbackController.create = (req, res) => {
   );
 }
 
+feedbackController.findAllByReviewId = (req, res) => {
+  console.log(req.query);
+  const reviewId = req.query.reviewId;
+  const condition = reviewId ? { review: reviewId } : {};
+
+  Feedback.find(condition)
+    .populate('assignedUser')
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({ message: err.message || "Error while retrieving all reviews." });
+    });
+}
+
 export default feedbackController;
