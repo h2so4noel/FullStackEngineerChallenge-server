@@ -4,7 +4,6 @@ Server side for MEVN application
 
 ## Techs Used
 
-- Frontend: [VueJS](https://vuejs.org/) along with [Bootstrap](https://getbootstrap.com/)
 - Backend: [NodeJS](https://nodejs.org/en/), [Express](http://expressjs.com/), [Mongoose](https://mongoosejs.com/)
 - Database: [MongoDB](https://www.mongodb.com/) 
 
