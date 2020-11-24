@@ -40,7 +40,6 @@ feedbackController.create = (req, res) => {
 }
 
 feedbackController.findAllByReviewId = (req, res) => {
-  console.log(req.query);
   const reviewId = req.query.reviewId;
   const condition = reviewId ? { review: reviewId } : {};
 

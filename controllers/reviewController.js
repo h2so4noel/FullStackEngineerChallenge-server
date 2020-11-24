@@ -25,7 +25,6 @@ reviewController.create = (req, res) => {
 }
 
 reviewController.findAll = (req, res) => {
-  console.log('find all reviews: ');
   const condition = req.query.revieweeUser ? { revieweeUser: req.query.revieweeUser } : {};
 
   Review.find(condition)
