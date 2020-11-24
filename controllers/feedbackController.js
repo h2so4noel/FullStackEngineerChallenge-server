@@ -6,7 +6,7 @@ const feedbackController = {};
 feedbackController.create = (req, res) => {
   const feedback = new Feedback({
     _id: new mongoose.Types.ObjectId(),
-    reviewId: req.body.reviewId,
+    review: req.body.review,
     assignedUser: req.body.assignedUser,
     pending: true,
     content: '',
@@ -30,7 +30,7 @@ feedbackController.create = (req, res) => {
   );
 
   Review.findOneAndUpdate(
-    { '_id' : feedback.reviewId }, 
+    { '_id' : feedback.review }, 
     { $push: { feedbacks: feedback._id } },
     {upsert: true}, 
     (err) => {

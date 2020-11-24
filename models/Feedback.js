@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const feedbackSchema = new Schema(
   {
-    reviewId: { type: Schema.Types.ObjectId, ref: 'Review' }, // review this feedback was assigned to
+    review: { type: Schema.Types.ObjectId, ref: 'Review' }, // review this feedback was assigned to
     assignedUser: { type: Schema.Types.ObjectId, ref: 'User' }, // the user who this feedback is assigned to by admin
     pending: Boolean, // true if the assigned user haven't input their feedback
     content: String,

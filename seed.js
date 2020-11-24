@@ -60,7 +60,7 @@ let feedbacks = [];
 for (let i = 0; i < 100; i++) {
   const feedback = {
     _id: new mongoose.Types.ObjectId(),
-    reviewId: _.sample(reviews)._id,
+    review: _.sample(reviews)._id,
     assignedUser: _.sample(users)._id,
     pending: _.sample([ true, false ]), // either true or false
     content: faker.lorem.words(25),
@@ -78,7 +78,7 @@ for (let i = 0; i < 100; i++) {
   );
 
   Review.findOneAndUpdate(
-    { '_id' : feedback.reviewId }, 
+    { '_id' : feedback.review }, 
     { $push: { feedbacks: feedback._id } },
     { upsert: true }, 
     (err) => {

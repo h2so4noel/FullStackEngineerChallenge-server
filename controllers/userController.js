@@ -18,25 +18,43 @@ userController.create = (req, res) => {
 
 userController.findAll = (req, res) => {
   // Populating reviews and feedbacks assigned
-  User.find().populate('reviews').populate('assignedFeedbacks').then(data => {
-    res.send(data);
-  }).catch(err => {
-    res.status(500).send({ message: err.msg || "Error while retrieving all users" });
-  });
+  User.find()
+    .populate('reviews')
+    .populate({
+      path: 'assignedFeedbacks',
+      populate: {
+        path: 'review',
+        model: 'Review',
+      }
+    })
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({ message: err.msg || "Error while retrieving all users" });
+    });
 }
 
 userController.findOne = (req,res) => {
   const id = req.params.id;
 
-  User.findById(id).populate('reviews').populate('assignedFeedbacks').then(data => {
-    if (!data) {
-      res.status(404).send({ message: "User not found with id: " + id });
-    } else {
-      res.send(data);
-    }
-  }).catch(err => {
-    res.status(500).send({ message: err.message || "Error while retrieving User with id: "+ id });
-  });
+  User.findById(id)
+    .populate('reviews')
+    .populate({
+      path: 'assignedFeedbacks',
+      populate: {
+        path: 'review',
+        model: 'Review',
+      }
+    })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "User not found with id: " + id });
+      } else {
+        res.send(data);
+      }
+    }).catch(err => {
+      res.status(500).send({ message: err.message || "Error while retrieving User with id: "+ id });
+    });
 }
 
 userController.update = (req, res) => {
@@ -50,7 +68,13 @@ userController.update = (req, res) => {
 
   User.findByIdAndUpdate(id, req.body, { useFindAndModify: false, new: true })
     .populate('reviews')
-    .populate('assignedFeedbacks')
+    .populate({
+      path: 'assignedFeedbacks',
+      populate: {
+        path: 'review',
+        model: 'Review',
+      }
+    })
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "User not found with id: " + id });
